@@ -4,7 +4,7 @@ Ce repo contient la première version (minimale) du jeu d’aventure TBA.
 
 Les lieux sont au nombre de 6. Il n'y a pas encore d’objets ni de personnages autres que le joueur et très peu d’interactions. Cette première version sert de base à ce qui va suivre, et sera améliorée au fur et à mesure.
 
-# GUIDE UTILISATEUR : 
+## GUIDE UTILISATEUR : 
   ***1) Comment installer le jeu ?***
 
   ***2) Description du jeu***
@@ -14,12 +14,6 @@ Pour l'aider, il pourra résoudre des énigmes qui lui donneront des indications
 
 
   ***3) Comment y jouer ?***
-
-
-# GUIDE DÉVELOPPEUR : 
-
-
-# PERSPECTIVES DE DÉVELOPPEMENT :
 
 ## Structuration
 
