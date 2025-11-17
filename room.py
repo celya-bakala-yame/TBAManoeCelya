@@ -6,6 +6,7 @@ class Room:
         self.exits = {}
         self.inventory = []        # Liste des objets présents dans la salle
         self.characters = []       # Liste des PNJ présents dans la salle
+    
 
     def get_exit(self, direction):
         return self.exits.get(direction)
