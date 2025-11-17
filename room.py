@@ -1,31 +1,33 @@
-# Define the Room class.
-
+# room.py
 class Room:
-
-    # Define the constructor. 
     def __init__(self, name, description):
         self.name = name
         self.description = description
         self.exits = {}
-    
-    # Define the get_exit method.
+        self.items = []        # Liste des objets présents dans la salle
+        self.characters = []   # Liste des PNJ présents dans la salle
+
     def get_exit(self, direction):
+        return self.exits.get(direction)
 
-        # Return the room in the given direction if it exists.
-        if direction in self.exits.keys():
-            return self.exits[direction]
-        else:
-            return None
-    
-    # Return a string describing the room's exits.
     def get_exit_string(self):
-        exit_string = "Sorties: " 
-        for exit in self.exits.keys():
-            if self.exits.get(exit) is not None:
+        exit_string = "Sorties: "
+        for exit, room in self.exits.items():
+            if room is not None:
                 exit_string += exit + ", "
-        exit_string = exit_string.strip(", ")
-        return exit_string
+        return exit_string.strip(", ")
 
-    # Return a long description of this room including exits.
     def get_long_description(self):
-        return f"\nVous êtes {self.description}\n\n{self.get_exit_string()}\n"
+        desc = f"\nVous êtes {self.description}\n\n{self.get_exit_string()}\n"
+        
+        if self.items:
+            desc += "\nObjets dans la salle :\n"
+            for item in self.items:
+                desc += f"- {item.name} : {item.description}\n"
+        
+        if self.characters:
+            desc += "\nPersonnages présents :\n"
+            for char in self.characters:
+                desc += f"- {char.name} : {char.description}\n"
+        
+        return desc

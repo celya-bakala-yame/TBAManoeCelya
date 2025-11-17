@@ -1,7 +1,4 @@
-# Description: Game class
-
-# Import modules
-
+# game.py
 from room import Room
 from player import Player
 from command import Command
@@ -9,92 +6,69 @@ from actions import Actions
 
 class Game:
 
-    # Constructor
     def __init__(self):
         self.finished = False
         self.rooms = []
         self.commands = {}
         self.player = None
     
-    # Setup the game
     def setup(self):
 
-        # Setup commands
-
-        help = Command("help", " : afficher cette aide", Actions.help, 0)
-        self.commands["help"] = help
-        quit = Command("quit", " : quitter le jeu", Actions.quit, 0)
-        self.commands["quit"] = quit
-        go = Command("go", " <direction> : se déplacer dans une direction cardinale (N, E, S, O)", Actions.go, 1)
-        self.commands["go"] = go
+        # Setup commands (seulement les 4)
+        self.commands["go"] = Command("go", " <direction> : se déplacer", Actions.go, 1)
+        self.commands["look"] = Command("look", " : examiner la salle ou un objet", Actions.look, 0)
+        self.commands["take"] = Command("take", " <objet> : prendre un objet", Actions.take, 1)
+        self.commands["talk"] = Command("talk", " <personnage> : parler à un PNJ", Actions.talk, 1)
         
-        # Setup rooms
+        # Setup rooms (exemple bibliothèque)
+        hall = Room("Hall", "dans le hall d'entrée de la bibliothèque")
+        reading_room = Room("Salle de lecture", "une grande salle avec des étagères remplies de livres")
+        study1 = Room("Salle de travail 1", "une petite salle silencieuse")
+        study2 = Room("Salle de travail 2", "une salle avec des tables pour étudier")
+        study3 = Room("Salle de travail 3", "une salle lumineuse")
+        study4 = Room("Salle de travail 4", "une salle calme avec quelques étudiants")
+        librarian_office = Room("Bureau du bibliothécaire", "le bureau du bibliothécaire")
+        secret_corridor = Room("Couloir secret", "un passage caché derrière le bureau")
+        archives = Room("Salle des archives", "une pièce où se cache le livre rare")
+        
+        # Relier les pièces
+        hall.exits = {"N": reading_room}
+        reading_room.exits = {"S": hall, "E": study1, "O": study2, "N": study3, "NE": study4, "NW": librarian_office}
+        librarian_office.exits = {"S": reading_room, "N": secret_corridor}
+        secret_corridor.exits = {"S": librarian_office, "N": archives}
+        # Relier autres salles si besoin...
+        
+        # Ajouter les salles dans la liste
+        self.rooms.extend([hall, reading_room, study1, study2, study3, study4, librarian_office, secret_corridor, archives])
 
-        forest = Room("Forest", "dans une forêt enchantée. Vous entendez une brise légère à travers la cime des arbres.")
-        self.rooms.append(forest)
-        tower = Room("Tower", "dans une immense tour en pierre qui s'élève au dessus des nuages.")
-        self.rooms.append(tower)
-        cave = Room("Cave", "dans une grotte profonde et sombre. Des voix semblent provenir des profondeurs.")
-        self.rooms.append(cave)
-        cottage = Room("Cottage", "dans un petit chalet pittoresque avec un toit de chaume. Une épaisse fumée verte sort de la cheminée.")
-        self.rooms.append(cottage)
-        swamp = Room("Swamp", "dans un marécage sombre et ténébreux. L'eau bouillonne, les abords sont vaseux.")
-        self.rooms.append(swamp)
-        castle = Room("Castle", "dans un énorme château fort avec des douves et un pont levis. Sur les tours, des flèches en or massif.")
-        self.rooms.append(castle)
-
-        # Create exits for rooms
-
-        forest.exits = {"N" : cave, "E" : tower, "S" : castle, "O" : None}
-        tower.exits = {"N" : cottage, "E" : None, "S" : swamp, "O" : forest}
-        cave.exits = {"N" : None, "E" : cottage, "S" : forest, "O" : None}
-        cottage.exits = {"N" : None, "E" : None, "S" : tower, "O" : cave}
-        swamp.exits = {"N" : tower, "E" : None, "S" : None, "O" : castle}
-        castle.exits = {"N" : forest, "E" : swamp, "S" : None, "O" : None}
-
-        # Setup player and starting room
-
+        # Setup player
         self.player = Player(input("\nEntrez votre nom: "))
-        self.player.current_room = swamp
+        self.player.current_room = hall
 
-    # Play the game
     def play(self):
         self.setup()
         self.print_welcome()
-        # Loop until the game is finished
         while not self.finished:
-            # Get the command from the player
             self.process_command(input("> "))
-        return None
 
-    # Process the command entered by the player
-    def process_command(self, command_string) -> None:
-
-        # Split the command string into a list of words
-        list_of_words = command_string.split(" ")
-
+    def process_command(self, command_string):
+        list_of_words = command_string.split()
+        if len(list_of_words) == 0:
+            return
         command_word = list_of_words[0]
-
-        # If the command is not recognized, print an error message
-        if command_word not in self.commands.keys():
-            print(f"\nCommande '{command_word}' non reconnue. Entrez 'help' pour voir la liste des commandes disponibles.\n")
-        # If the command is recognized, execute it
+        if command_word not in self.commands:
+            print(f"\nCommande '{command_word}' non reconnue.\n")
         else:
             command = self.commands[command_word]
             command.action(self, list_of_words, command.number_of_parameters)
 
-    # Print the welcome message
     def print_welcome(self):
         print(f"\nBienvenue {self.player.name} dans ce jeu d'aventure !")
-        print("Entrez 'help' si vous avez besoin d'aide.")
-        #
+        print("Utilisez 'go', 'look', 'take', 'talk' pour interagir avec l'environnement.\n")
         print(self.player.current_room.get_long_description())
-    
 
 def main():
-    # Create a game object and play the game
     Game().play()
-    
 
 if __name__ == "__main__":
     main()
