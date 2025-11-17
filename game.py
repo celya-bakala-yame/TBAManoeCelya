@@ -14,13 +14,14 @@ class Game:
     
     def setup(self):
 
-        # Setup commands (seulement les 4)
+        # Setup commands (5 commandes : go, look, take, drop, talk)
         self.commands["go"] = Command("go", " <direction> : se déplacer", Actions.go, 1)
         self.commands["look"] = Command("look", " : examiner la salle ou un objet", Actions.look, 0)
         self.commands["take"] = Command("take", " <objet> : prendre un objet", Actions.take, 1)
+        self.commands["drop"] = Command("drop", " <objet> : poser un objet", Actions.drop, 1)
         self.commands["talk"] = Command("talk", " <personnage> : parler à un PNJ", Actions.talk, 1)
         
-        # Setup rooms (exemple bibliothèque)
+        # Setup rooms
         hall = Room("Hall", "dans le hall d'entrée de la bibliothèque")
         reading_room = Room("Salle de lecture", "une grande salle avec des étagères remplies de livres")
         study1 = Room("Salle de travail 1", "une petite salle silencieuse")
@@ -36,7 +37,7 @@ class Game:
         reading_room.exits = {"S": hall, "E": study1, "O": study2, "N": study3, "NE": study4, "NW": librarian_office}
         librarian_office.exits = {"S": reading_room, "N": secret_corridor}
         secret_corridor.exits = {"S": librarian_office, "N": archives}
-        # Relier autres salles si besoin...
+        # Autres salles peuvent être reliées si nécessaire...
         
         # Ajouter les salles dans la liste
         self.rooms.extend([hall, reading_room, study1, study2, study3, study4, librarian_office, secret_corridor, archives])
@@ -64,7 +65,7 @@ class Game:
 
     def print_welcome(self):
         print(f"\nBienvenue {self.player.name} dans ce jeu d'aventure !")
-        print("Utilisez 'go', 'look', 'take', 'talk' pour interagir avec l'environnement.\n")
+        print("Utilisez 'go', 'look', 'take', 'drop', 'talk' pour interagir avec l'environnement.\n")
         print(self.player.current_room.get_long_description())
 
 def main():
