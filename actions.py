@@ -4,6 +4,9 @@ MSG1 = "\nLa commande '{command_word}' prend 1 seul paramètre.\n"
 
 class Actions:
 
+    VALID_DIRECTIONS = {
+    "N":"NORD","NORD":"NORD","S":"SUD","SUD":"SUD","E":"EST","EST":"EST","O":"OUEST","OUEST":"OUEST"}
+
     def go(game, list_of_words, number_of_parameters):
         player = game.player
         l = len(list_of_words)
@@ -11,7 +14,11 @@ class Actions:
             command_word = list_of_words[0]
             print(MSG1.format(command_word=command_word))
             return False
-        direction = list_of_words[1]
+        direction = list_of_words[1].upper()
+        if direction not in Actions.VALID_DIRECTIONS:
+            print("Cette direction n'est pas valide.")
+            return False
+        direction = Actions.VALID_DIRECTIONS[direction]
         return player.move(direction)
 
     def look(game, list_of_words, number_of_parameters):
@@ -76,22 +83,21 @@ class Actions:
         return True
 
     # actions.py (extrait : fonction talk)
-# actions.py (extrait : fonction talk)
-def talk(game, list_of_words, number_of_parameters):
-    player = game.player
-    l = len(list_of_words)
-    
-    if l != number_of_parameters + 1:
-        command_word = list_of_words[0]
-        print(MSG1.format(command_word=command_word))
-        return False
-    
-    npc_name = list_of_words[1]
-    npc = next((c for c in player.current_room.characters if c.name.lower() == npc_name.lower()), None)
-    
-    if npc is None:
-        print(f"\nIl n'y a personne nommé '{npc_name}' ici.\n")
-        return False
+    def talk(game, list_of_words, number_of_parameters):
+        player = game.player
+        l = len(list_of_words)
+        
+        if l != number_of_parameters + 1:
+            command_word = list_of_words[0]
+            print(MSG1.format(command_word=command_word))
+            return False
+        
+        npc_name = list_of_words[1]
+        npc = next((c for c in player.current_room.characters if c.name.lower() == npc_name.lower()), None)
+        
+        if npc is None:
+            print(f"\nIl n'y a personne nommé '{npc_name}' ici.\n")
+            return False
     
     # Comportements spéciaux pour certains PNJ
     # 1. Bibliothécaire
