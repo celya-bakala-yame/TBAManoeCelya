@@ -1,7 +1,7 @@
 # Define the Room class.
 
 class Room:
- """Représente une pièce du jeu."""
+    """Représente une pièce du jeu."""
 
     # Define the constructor. 
     def __init__(self, name, description):
