@@ -19,7 +19,13 @@ MSG1 = "\nLa commande '{command_word}' prend 1 seul paramètre.\n"
 class Actions:
 
     VALID_DIRECTIONS = {
-   "N":"NORD","NORD":"NORD","S":"SUD","SUD":"SUD","E":"EST","EST":"EST","O":"OUEST","OUEST":"OUEST","U":"UP","UP":"UP","D":"DOWN","DOWN":"DOWN"}
+        "N": "N", "NORD": "N",
+        "S": "S", "SUD": "S",
+        "E": "E", "EST": "E",
+        "O": "O", "OUEST": "O",
+        "U": "U", "UP": "U",
+        "D": "D", "DOWN": "D"
+    }
 
     def go(game, list_of_words, number_of_parameters):
         """
@@ -57,10 +63,15 @@ class Actions:
             return False
 
         # Get the direction from the list of words.
-        direction = list_of_words[1]
+        direction = list_of_words[1].upper()
+        if direction not in Actions.VALID_DIRECTIONS:
+           print("Cette direction n'est pas valide.")
+           return False
         # Move the player in the direction specified by the parameter.
-        player.move(direction)
+        final_direction = Actions.VALID_DIRECTIONS[direction]
+        player.move(final_direction)
         return True
+        
 
     def quit(game, list_of_words, number_of_parameters):
         """
