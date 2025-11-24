@@ -53,4 +53,4 @@ class Room:
         Returns:
             str: Une description multilignes de la pièce et de ses sorties."""
             
-        return f"\nVous êtes {self.description}\n\n{self.get_exit_string()}\n"
+        return f"\nVous êtes dans {self.description}\n\n{self.get_exit_string()}\n"

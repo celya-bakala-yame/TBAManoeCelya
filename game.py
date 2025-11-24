@@ -30,18 +30,26 @@ class Game:
         
         # Setup rooms
 
-        forest = Room("Forest", "dans une forêt enchantée. Vous entendez une brise légère à travers la cime des arbres.")
-        self.rooms.append(forest)
-        tower = Room("Tower", "dans une immense tour en pierre qui s'élève au dessus des nuages.")
-        self.rooms.append(tower)
-        cave = Room("Cave", "dans une grotte profonde et sombre. Des voix semblent provenir des profondeurs.")
-        self.rooms.append(cave)
-        cottage = Room("Cottage", "dans un petit chalet pittoresque avec un toit de chaume. Une épaisse fumée verte sort de la cheminée.")
-        self.rooms.append(cottage)
-        swamp = Room("Swamp", "dans un marécage sombre et ténébreux. L'eau bouillonne, les abords sont vaseux.")
-        self.rooms.append(swamp)
-        castle = Room("Castle", "dans un énorme château fort avec des douves et un pont levis. Sur les tours, des flèches en or massif.")
-        self.rooms.append(castle)
+        hall = Room("Hall", "le hall d'entrée spacieux.")
+        self.rooms.append(hall)
+        library = Room("Salle de lecture", "une grande bibliothèque calme mais un peu sombre.")
+        self.rooms.append(library)
+        study1 = Room("Salle de travail 1", "une petite salle silencieuse.")
+        self.rooms.append(study1)
+        study2 = Room("Salle de travail 2", "une salle avec un étudiant perdu.")
+        self.rooms.append(study2)
+        study3 = Room("Salle de travail 3", "une salle avec une clé cassée sur une table.")
+        self.rooms.append(study3)
+        study4 = Room("Salle de travail 4", "une salle calme avec un fantôme mystérieux.")
+        self.rooms.append(study4)
+        librarian_office = Room("Bureau du bibliothécaire", "le bureau du bibliothécaire, avec un tiroir verrouillé.")
+        self.rooms.append(librarian_office)
+        secret_corridor = Room("Passage secret", "un couloir caché derrière le bureau.")
+        self.rooms.append(secret_corridor)
+        dark_corridor = Room("Couloir sombre", "une zone trop sombre pour avancer sans lampe.")
+        self.rooms.append(dark_corridor)
+        archives = Room("Salle des archives", "une pièce silencieuse avec des livres anciens.")
+        self.rooms.append(archives)
 
         # Create exits for rooms
 
