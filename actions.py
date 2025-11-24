@@ -18,6 +18,9 @@ MSG1 = "\nLa commande '{command_word}' prend 1 seul paramètre.\n"
 
 class Actions:
 
+    VALID_DIRECTIONS = {
+   "N":"NORD","NORD":"NORD","S":"SUD","SUD":"SUD","E":"EST","EST":"EST","O":"OUEST","OUEST":"OUEST","U":"UP","UP":"UP","D":"DOWN","DOWN":"DOWN"}
+
     def go(game, list_of_words, number_of_parameters):
         """
         Move the player in the direction specified by the parameter.

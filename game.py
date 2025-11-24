@@ -25,7 +25,7 @@ class Game:
         self.commands["help"] = help
         quit = Command("quit", " : quitter le jeu", Actions.quit, 0)
         self.commands["quit"] = quit
-        go = Command("go", " <direction> : se déplacer dans une direction cardinale (N, E, S, O)", Actions.go, 1)
+        go = Command("go", " <direction> : se déplacer dans une direction cardinale (N, E, S, O) ou dans les étages (U, D)", Actions.go, 1)
         self.commands["go"] = go
         
         # Setup rooms
@@ -46,24 +46,25 @@ class Game:
         self.rooms.append(librarian_office)
         secret_corridor = Room("Passage secret", "un couloir caché derrière le bureau.")
         self.rooms.append(secret_corridor)
-        dark_corridor = Room("Couloir sombre", "une zone trop sombre pour avancer sans lampe.")
-        self.rooms.append(dark_corridor)
         archives = Room("Salle des archives", "une pièce silencieuse avec des livres anciens.")
         self.rooms.append(archives)
 
         # Create exits for rooms
 
-        forest.exits = {"N" : cave, "E" : None, "S" : castle, "O" : None}
-        tower.exits = {"N" : cottage, "E" : None, "S" : None, "O" : None}
-        cave.exits = {"N" : None, "E" : cottage, "S" : forest, "O" : None}
-        cottage.exits = {"N" : None, "E" : None, "S" : tower, "O" : cave}
-        swamp.exits = {"N" : tower, "E" : None, "S" : None, "O" : castle}
-        castle.exits = {"N" : forest, "E" : swamp, "S" : None, "O" : None}
+        hall.exits = {"N" : library, "E" : librarian_office, "S" : None, "O" : study4, "U" : None, "D" : None}
+        library.exits = {"N" : None, "E" : None, "S" : hall , "O" : study1, "U" : None, "D" : None}
+        study1.exits = {"N" : None, "E" : library, "S" : study2, "O" : None, "U" : None, "D" : None}
+        study2.exits = {"N" : study1, "E" : None, "S" : study3, "O" : None, "U" : None, "D" : None}
+        study3.exits = {"N" : study2, "E" : None, "S" : study4, "O" : None, "U" : None, "D" : None}
+        study4.exits = {"N" : study3, "E" : hall, "S" : None, "O" : None, "U" : None, "D" : None}
+        librarian_office.exits = {"N" : None, "E" : secret_corridor, "S" : None, "O" : hall, "U" : None, "D" : None}
+        secret_corridor.exits = {"N" : None, "E" : None, "S" : None, "O" : librarian_office, "U" : None, "D" : archives}
+        archives.exits = {"N" : None, "E" : None, "S" : None, "O" : None, "U" : secret_corridor, "D" : None}
 
         # Setup player and starting room
 
         self.player = Player(input("\nEntrez votre nom: "))
-        self.player.current_room = swamp
+        self.player.current_room = hall
 
     # Play the game
     def play(self):
