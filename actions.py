@@ -71,7 +71,8 @@ class Actions:
         final_direction = Actions.VALID_DIRECTIONS[direction]
         player.move(final_direction)
         return True
-        
+
+
 
     def quit(game, list_of_words, number_of_parameters):
         """
@@ -158,3 +159,35 @@ class Actions:
         
         """
         print(game.player.get_history())
+
+    def back(game, list_of_words, number_of_parameters):
+        """
+    Permet de revenir à la pièce précédente, si possible.
+    
+    Args:
+        game (Game): L'objet de jeu.
+        list_of_words (list): Liste des mots dans la commande.
+        number_of_parameters (int): Le nombre de paramètres attendus par la commande.
+
+    Returns:
+        bool: True si la commande a été exécutée avec succès, False sinon.
+    """
+
+        l = len(list_of_words)
+        # Vérifie que la commande ne prend pas de paramètres
+        if l != number_of_parameters + 1:
+            command_word = list_of_words[0]
+            print(MSG0.format(command_word=command_word))
+            return False
+
+        player = game.player
+        # Si l'historique est vide, le joueur ne peut pas revenir en arrière
+        if not player.history:
+            print("\nVous n'avez encore visité aucune autre pièce.\n")
+            return False
+    
+        # Revenir à la dernière pièce visitée
+        previous_room = player.history.pop()  # Retirer la dernière pièce de l'historique
+        player.current_room = previous_room
+        print(f"\nVous êtes maintenant dans : {player.current_room.get_long_description()}")
+        return True

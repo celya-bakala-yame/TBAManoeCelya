@@ -40,8 +40,10 @@ class Player():
         if next_room is None:
             print("\nAucune porte dans cette direction !\n")
             return False
-    
+
+        
         # Mettre à jour l'historique AVANT le déplacement
+
         self.history.append(self.current_room)
 
         # Set the current room to the next room.
