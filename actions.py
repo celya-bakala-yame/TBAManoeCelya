@@ -151,3 +151,10 @@ class Actions:
             print("\t- " + str(command))
         print()
         return True
+    
+    def history(game, words, number_of_parameters):
+        """
+        Affiche l’historique des salles visitées par le joueur.
+        
+        """
+        print(game.player.get_history())
