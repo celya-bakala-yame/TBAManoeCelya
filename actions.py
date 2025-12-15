@@ -245,3 +245,14 @@ class Actions:
         item_name = params[1]
         game.player.drop(item_name)
 
+    def check(game, list_of_words, number_of_parameters):
+
+        # Vérification du nombre de paramètres
+        if len(list_of_words) != number_of_parameters + 1:
+            command_word = list_of_words[0]
+            print(MSG0.format(command_word=command_word))
+            return False
+
+        print("\n" + game.player.get_inventory() + "\n")
+        return True
+

@@ -17,6 +17,8 @@ class Player():
         self.current_room = None
         self.history = []   # historique initialisé vide
         self.inventory = []      # inventaire initialisé vide
+        self.max_weight = 2.0   # poids max transportable (en kg)
+
     
     # Define the move method.
     def move(self, direction):
@@ -75,38 +77,48 @@ class Player():
         """Retourne une chaîne de caractères représentant les objets du joueur."""
 
         if not self.inventory:
-            return "Votre inventaire est vide."
+            return f"Votre inventaire est vide (0.00 / {self.max_weight:.2f} kg)."
 
-        lines = ["Vous disposez des items suivants :"]
+        lines = [
+            f"Vous disposez des items suivants ({self.get_inventory_weight():.2f} / {self.max_weight:.2f} kg) :"
+        ]
         for item in self.inventory:
             lines.append("    - " + str(item))
 
         return "\n".join(lines)
+
     
     def take(self, item_name):
         """
-        Prend un item depuis la salle actuelle et le met dans l'inventaire du joueur.
-        
-        Args:
-            item_name (str): le nom de l'item à prendre
+        Prend un item depuis la salle actuelle et le met dans l'inventaire du joueur
+        si le poids le permet.
         """
         room = self.current_room
 
-        # Cherche l'item par nom dans la salle
+        # Cherche l'item dans la salle
         item_to_take = None
         for item in room.inventory:
             if item.name.lower() == item_name.lower():
                 item_to_take = item
                 break
 
-        if item_to_take:
-            # Retirer de la salle
-            room.inventory.remove(item_to_take)
-            # Ajouter au joueur
-            self.inventory.append(item_to_take)
-            print("\n" + f"Vous avez pris l'objet '{item_to_take}'" + "\n")
-        else:
-            print("\n" + f"L'item '{item_name}' n'est pas présent dans cette salle." + "\n")
+        if not item_to_take:
+            print(f"\nL'item '{item_name}' n'est pas présent dans cette salle.\n")
+            return
+
+        # Vérification du poids
+        current_weight = self.get_inventory_weight()
+        if current_weight + item_to_take.weight > self.max_weight:
+            print(
+                f"\nImpossible de prendre '{item_to_take.name}' : "
+                f"poids maximum dépassé ({current_weight:.2f} / {self.max_weight:.2f} kg).\n"
+            )
+            return
+
+        # Prendre l'objet
+        room.inventory.remove(item_to_take)
+        self.inventory.append(item_to_take)
+        print(f"\nVous avez pris l'objet '{item_to_take.name}'.\n")
 
     def drop(self, item_name):
         """
@@ -127,8 +139,16 @@ class Player():
             self.inventory.remove(item_to_drop)
             # Ajouter à la salle
             self.current_room.inventory.append(item_to_drop)
-            print("\n" + f"Vous avez déposé l'objet '{item_to_drop}'" + "\n")
+            print("\n" + f"Vous avez déposé l'objet '{item_to_drop.name}'" + "\n")
         else:
             print("\n" + f"L'item '{item_name}' n'est pas dans votre inventaire." + "\n")
 
+    def get_inventory_weight(self):
+        """Retourne le poids total des objets transportés."""
+
+        total = 0
+        for item in self.inventory:
+            total += item.weight
+        return total
     
+

@@ -39,6 +39,9 @@ class Game:
         self.commands["take"] = take
         drop = Command("drop", " <nom_item> : déposer un item de votre inventaire dans la salle", Actions.drop, 1)
         self.commands["drop"] = drop
+        check = Command("check", " : afficher le contenu de votre inventaire", Actions.check, 0)
+        self.commands["check"] = check
+
 
 
         
@@ -82,8 +85,8 @@ class Game:
 
         # Setup items
 
-        plan_rez = Item("plan_rez", "Plan du rez-de-chaussée (carte simple)", 0.1)
-        self.items.append(plan_rez)
+        plan = Item("plan", "Plan du rez-de-chaussée (carte simple)", 0.1)
+        self.items.append(plan)
         lampe = Item("lampe", "Lampe de poche", 0.3)
         self.items.append(lampe)
         livre_ouvert = Item("livre_ouvert", "Livre ouvert", 1)
@@ -111,7 +114,7 @@ class Game:
 
         # Setup inventory of rooms
 
-        hall.inventory.append(plan_rez)
+        hall.inventory.append(plan)
         library.inventory.append(lampe)
         library.inventory.append(livre_ouvert)
         study1.inventory.append(note_chiffonnee)
