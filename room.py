@@ -15,7 +15,9 @@ class Room:
         self.description = description
         self.exits = {}
         self.inventory = []        # Inventaire vide (liste d’items)
-    
+        self.door = None
+        self.drawer = None
+
     # Define the get_exit method.
     def get_exit(self, direction):
         """ Retourne la pièce située dans la direction donnée.
@@ -66,3 +68,13 @@ class Room:
             lines.append("    - " + str(item))  # utilise __str__() de Item
 
         return "\n".join(lines)
+
+class Door :
+    def __init__(self, locked=True):
+        self.locked = locked
+
+
+class Drawer : 
+    def __init__(self, locked=True):
+        self.locked = locked
+    

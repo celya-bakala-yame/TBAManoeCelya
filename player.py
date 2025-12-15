@@ -17,7 +17,7 @@ class Player():
         self.current_room = None
         self.history = []   # historique initialisé vide
         self.inventory = []      # inventaire initialisé vide
-        self.max_weight = 2.0   # poids max transportable (en kg)
+        self.max_weight = 2.5   # poids max transportable (en kg)
 
     
     # Define the move method.
@@ -35,7 +35,17 @@ class Player():
         Prints:
             str: Affiche la description complète de la nouvelle salle ou un message
                  d'erreur si le mouvement est impossible."""
-                 
+        room = self.current_room
+        if room.door and room.door.locked:
+            for item in self.inventory:
+                if item.name == "cle_passage_secret":
+                    room.door.locked = False
+                    print("\nVous avez déverrouillé la porte avec la clé.\n")
+                    break
+            if room.door.locked:
+                print("\nLa porte est verrouillée.\n")
+                return False
+        
         # Get the next room from the exits dictionary of the current room.
         next_room = self.current_room.exits[direction]
 
@@ -105,6 +115,22 @@ class Player():
         if not item_to_take:
             print(f"\nL'item '{item_name}' n'est pas présent dans cette salle.\n")
             return
+        
+        if item_to_take.name == "tiroir_verrouille" and room.drawer :
+            if room.drawer.locked:
+                has_key = any(it.name == "cle_tiroir" for it in self.inventory)
+
+                if not has_key:
+                    print("\nLe tiroir est verrouillé. Il vous faut la clé du tiroir.\n")
+                    return
+                
+                room.drawer.locked = False
+                print("\nVous avez déverrouillé le tiroir avec la clé.\n")
+
+                if hasattr(room, "drawer_key") and room.drawer_key:
+                    room.inventory.append(room.drawer_key)
+                    print("Quelque chose se trouve dans le tiroir...\n")
+                    room.drawer_key = None
 
         # Vérification du poids
         current_weight = self.get_inventory_weight()

@@ -2,11 +2,12 @@
 
 # Import modules
 
-from room import Room
+from room import Room, Door, Drawer
 from player import Player
 from command import Command
 from actions import Actions
 from item import Item
+
 
 class Game:
 
@@ -65,6 +66,11 @@ class Game:
         self.rooms.append(secret_corridor)
         archives = Room("Salle des archives", "une pièce silencieuse avec des livres anciens.")
         self.rooms.append(archives)
+        
+
+        secret_corridor.door = Door(locked=True) # Porte du passage secret
+        librarian_office.drawer = Drawer(locked=True) # Tiroir du bureau du bibliothécaire
+        
 
         # Create exits for rooms
 
@@ -112,6 +118,7 @@ class Game:
         boite_archives = Item("boite_archives", "Boîte d’archives fermée", 1)
         self.items.append(boite_archives)
 
+        librarian_office.drawer_key = cle_passage_secret
         # Setup inventory of rooms
 
         hall.inventory.append(plan)
@@ -120,7 +127,6 @@ class Game:
         study1.inventory.append(note_chiffonnee)
         study2.inventory.append(stylo_oublie)
         study3.inventory.append(cle_tiroir)
-        librarian_office.inventory.append(cle_passage_secret)
         librarian_office.inventory.append(dossier_poussiereux)
         librarian_office.inventory.append(tiroir_verrouille)
         secret_corridor.inventory.append(affiche_cryptee)
