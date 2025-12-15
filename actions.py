@@ -159,19 +159,20 @@ class Actions:
         
         """
         print(game.player.get_history())
+        return False
 
     def back(game, list_of_words, number_of_parameters):
         """
-    Permet de revenir à la pièce précédente, si possible.
-    
-    Args:
-        game (Game): L'objet de jeu.
-        list_of_words (list): Liste des mots dans la commande.
-        number_of_parameters (int): Le nombre de paramètres attendus par la commande.
+        Permet de revenir à la pièce précédente, si possible.
+        
+        Args:
+            game (Game): L'objet de jeu.
+            list_of_words (list): Liste des mots dans la commande.
+            number_of_parameters (int): Le nombre de paramètres attendus par la commande.
 
-    Returns:
-        bool: True si la commande a été exécutée avec succès, False sinon.
-    """
+        Returns:
+            bool: True si la commande a été exécutée avec succès, False sinon.
+        """
 
         l = len(list_of_words)
         # Vérifie que la commande ne prend pas de paramètres
@@ -191,3 +192,56 @@ class Actions:
         player.current_room = previous_room
         print(f"\nVous êtes maintenant dans : {player.current_room.get_long_description()}")
         return True
+
+    def look(game, params, n_params):
+        """
+        Affiche la description de la salle et les items présents.
+        
+        Args:
+            game (Game): l'objet du jeu
+            params (list): paramètres de la commande
+            n_params (int): nombre de paramètres attendus
+        """
+        room = game.player.current_room
+        
+        # Affiche la description complète de la salle
+        first_line = room.get_long_description().strip().split("\n")[0]
+        print("\n" + first_line + "\n")
+        
+        # Affiche les items présents
+        if room.inventory:  # l'inventaire est une liste, True si non vide
+            print("La pièce contient :")
+            for item in room.inventory:
+                print(f"    - {item}")
+            print("\n")
+        else:
+            print("Il n'y a rien ici." + "\n")
+
+    def take(game, params, n_params):
+        """
+        Commande take : permet au joueur de prendre un item.
+        
+        Args:
+            game (Game): objet Game
+            params (list): liste des mots de la commande
+            n_params (int): nombre de paramètres attendus
+        """
+        if len(params) < 2:
+            print("Précisez l'item à prendre. Exemple : take lampe")
+            return
+
+        item_name = params[1]
+        game.player.take(item_name)
+
+    
+    def drop(game, params, n_params):
+        """
+        Commande drop : permet au joueur de déposer un item dans la salle.
+        """
+        if len(params) < 2:
+            print("Précisez l'item à déposer. Exemple : drop lampe")
+            return
+
+        item_name = params[1]
+        game.player.drop(item_name)
+

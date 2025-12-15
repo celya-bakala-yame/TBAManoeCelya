@@ -14,6 +14,7 @@ class Room:
         self.name = name
         self.description = description
         self.exits = {}
+        self.inventory = []        # Inventaire vide (liste d’items)
     
     # Define the get_exit method.
     def get_exit(self, direction):
@@ -54,3 +55,14 @@ class Room:
             str: Une description multilignes de la pièce et de ses sorties."""
             
         return f"\nVous êtes dans {self.description}\n\n{self.get_exit_string()}\n"
+
+    def get_inventory(self):
+        """Retourne une chaîne décrivant le contenu de la pièce."""
+        if not self.inventory:
+            return "Il n'y a rien ici."
+
+        lines = ["La pièce contient :"]
+        for item in self.inventory:
+            lines.append("    - " + str(item))  # utilise __str__() de Item
+
+        return "\n".join(lines)

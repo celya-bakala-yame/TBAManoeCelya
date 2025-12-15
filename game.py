@@ -6,6 +6,7 @@ from room import Room
 from player import Player
 from command import Command
 from actions import Actions
+from item import Item
 
 class Game:
 
@@ -15,6 +16,7 @@ class Game:
         self.rooms = []
         self.commands = {}
         self.player = None
+        self.items = []
     
     # Setup the game
     def setup(self):
@@ -31,6 +33,14 @@ class Game:
         self.commands["history"] = history
         back = Command("back", " : revenir à la pièce précédente", Actions.back, 0)
         self.commands["back"] = back
+        look = Command("look"," : observer la pièce et les objets présents", Actions.look, 0)
+        self.commands["look"] = look
+        take = Command("take", " <nom_item> : prendre un item et l'ajouter à votre inventaire", Actions.take, 1)
+        self.commands["take"] = take
+        drop = Command("drop", " <nom_item> : déposer un item de votre inventaire dans la salle", Actions.drop, 1)
+        self.commands["drop"] = drop
+
+
         
         # Setup rooms
 
@@ -69,6 +79,51 @@ class Game:
 
         self.player = Player(input("\nEntrez votre nom: "))
         self.player.current_room = hall
+
+        # Setup items
+
+        plan_rez = Item("plan_rez", "Plan du rez-de-chaussée (carte simple)", 0.1)
+        self.items.append(plan_rez)
+        lampe = Item("lampe", "Lampe de poche", 0.3)
+        self.items.append(lampe)
+        livre_ouvert = Item("livre_ouvert", "Livre ouvert", 1)
+        self.items.append(livre_ouvert)
+        note_chiffonnee = Item("note_chiffonnee", "Note chiffonnée", 0.05)
+        self.items.append(note_chiffonnee)
+        stylo_oublie = Item("stylo_oublie", "Stylo oublié", 0.05)
+        self.items.append(stylo_oublie)
+        cle_cassee = Item("cle_cassee", "Clé cassée", 0.05)
+        self.items.append(cle_cassee)
+        cle_passage_secret = Item("cle_passage_secret", "Clé du passage secret", 0.05)
+        self.items.append(cle_passage_secret)
+        dossier_poussiereux = Item("dossier_poussiereux", "Dossier poussiéreux", 0.5)
+        self.items.append(dossier_poussiereux)
+        tiroir_verrouille = Item("tiroir_verrouille", "Un tiroir verrouillé", 2)
+        self.items.append(tiroir_verrouille)
+        affiche_cryptee = Item("affiche_cryptee", "Affiche avec message crypté", 0.2)
+        self.items.append(affiche_cryptee)
+        livre_rare = Item("livre_rare", "Livre rare", 1.2)
+        self.items.append(livre_rare)
+        livre_faux = Item("livre_faux", "Livre faux", 1)
+        self.items.append(livre_faux)
+        boite_archives = Item("boite_archives", "Boîte d’archives fermée", 1)
+        self.items.append(boite_archives)
+
+        # Setup inventory of rooms
+
+        hall.inventory.append(plan_rez)
+        library.inventory.append(lampe)
+        library.inventory.append(livre_ouvert)
+        study1.inventory.append(note_chiffonnee)
+        study2.inventory.append(stylo_oublie)
+        study3.inventory.append(cle_cassee)
+        librarian_office.inventory.append(cle_passage_secret)
+        librarian_office.inventory.append(dossier_poussiereux)
+        librarian_office.inventory.append(tiroir_verrouille)
+        secret_corridor.inventory.append(affiche_cryptee)
+        archives.inventory.append(livre_rare)
+        archives.inventory.append(livre_faux)
+        archives.inventory.append(boite_archives)
 
     # Play the game
     def play(self):
