@@ -188,14 +188,7 @@ class Game:
         
 
         # If the command is not recognized, print an error message
-        
-
-        all_characters = []
-        for room in self.rooms:
-            all_characters.extend(room.characters)
-
-        for character in all_characters:
-            character.move()
+    
 
         list_of_words = command_string.split(" ")
 
@@ -206,6 +199,12 @@ class Game:
         else:
             command = self.commands[command_word]
             command.action(self, list_of_words, command.number_of_parameters)
+        all_characters = []
+        for room in self.rooms:
+            all_characters.extend(room.characters)
+
+        for character in all_characters:
+            character.move()
 
     # Print the welcome message
     def print_welcome(self):
