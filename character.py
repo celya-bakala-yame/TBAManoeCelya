@@ -8,7 +8,6 @@ class Character:
         self.can_move = True 
 
     def move(self):
-        def move(self):
         # Si le personnage ne peut pas bouger, on arrête  
         if not self.can_move:                             
             return False                                  
