@@ -22,35 +22,33 @@ class Player():
     
     # Define the move method.
     def move(self, direction):
-
         room = self.current_room
         next_room = room.exits.get(direction)
 
-        # 1️⃣ Pas de sortie
         if next_room is None:
             print("\nAucune porte dans cette direction !\n")
             return False
 
-        # 2️⃣ Porte verrouillée UNIQUEMENT vers le passage secret
-        if next_room.name == "Passage secret":
-            if room.door and room.door.locked:
-                has_key = any(item.name == "cle_passage_secret" for item in self.inventory)
+        # Vérification de la porte UNIQUEMENT si on va vers le passage secret
+        if room.door and room.door.locked and next_room.name == "Passage secret":
+            has_key = any(item.name == "cle_passage_secret" for item in self.inventory)
 
-                if not has_key:
-                    print("\nLa porte est verrouillée.\n")
-                    return False
+            if not has_key:
+                print("\nLa porte est verrouillée.\n")
+                return False
 
-                room.door.locked = False
-                print("\nVous avez déverrouillé la porte avec la clé.\n")
+            room.door.locked = False
+            print("\nVous avez déverrouillé la porte avec la clé.\n")
 
-        # 3️⃣ Déplacement
-        self.history.append(self.current_room)
+        # Historique AVANT déplacement
+        self.history.append(room)
+
         self.current_room = next_room
-
         print(self.current_room.get_long_description())
         print(self.get_history() + "\n")
 
-    return True
+        return True
+        
     def get_history(self):
         """Retourne une chaîne de caractères représentant les pièces visitées."""
 
