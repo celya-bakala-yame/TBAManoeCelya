@@ -22,52 +22,35 @@ class Player():
     
     # Define the move method.
     def move(self, direction):
-        """ Déplace le joueur dans la direction spécifiée si possible.
 
-        Args:
-            direction (str): La direction dans laquelle le joueur souhaite se déplacer
-                             (ex: "nord", "est", "sud", "ouest").
-
-        Returns:
-            bool: True si le déplacement a réussi, False si aucune sortie n'existe
-                  dans cette direction.
-        
-        Prints:
-            str: Affiche la description complète de la nouvelle salle ou un message
-                 d'erreur si le mouvement est impossible."""
         room = self.current_room
-        if room.door and room.door.locked:
-            for item in self.inventory:
-                if item.name == "cle_passage_secret":
-                    room.door.locked = False
-                    print("\nVous avez déverrouillé la porte avec la clé.\n")
-                    break
-            if room.door.locked:
-                print("\nLa porte est verrouillée.\n")
-                return False
-        
-        # Get the next room from the exits dictionary of the current room.
-        next_room = self.current_room.exits[direction]
+        next_room = room.exits.get(direction)
 
-        # If the next room is None, print an error message and return False.
+        # 1️⃣ Pas de sortie
         if next_room is None:
             print("\nAucune porte dans cette direction !\n")
             return False
 
-        
-        # Mettre à jour l'historique AVANT le déplacement
+        # 2️⃣ Porte verrouillée UNIQUEMENT vers le passage secret
+        if next_room.name == "Passage secret":
+            if room.door and room.door.locked:
+                has_key = any(item.name == "cle_passage_secret" for item in self.inventory)
 
+                if not has_key:
+                    print("\nLa porte est verrouillée.\n")
+                    return False
+
+                room.door.locked = False
+                print("\nVous avez déverrouillé la porte avec la clé.\n")
+
+        # 3️⃣ Déplacement
         self.history.append(self.current_room)
-
-        # Set the current room to the next room.
         self.current_room = next_room
-        print(self.current_room.get_long_description())
 
-        # Affichage automatique de l'historique
+        print(self.current_room.get_long_description())
         print(self.get_history() + "\n")
 
-        return True
-
+    return True
     def get_history(self):
         """Retourne une chaîne de caractères représentant les pièces visitées."""
 
