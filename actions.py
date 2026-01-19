@@ -195,27 +195,29 @@ class Actions:
 
     def look(game, params, n_params):
         """
-        Affiche la description de la salle et les items présents.
-        
-        Args:
-            game (Game): l'objet du jeu
-            params (list): paramètres de la commande
-            n_params (int): nombre de paramètres attendus
+        Affiche la description de la salle, les PNJ et les items présents.
         """
         room = game.player.current_room
-        
+
         # Affiche la description complète de la salle
         first_line = room.get_long_description().strip().split("\n")[0]
         print("\n" + first_line + "\n")
-        
-        # Affiche les items présents
-        if room.inventory:  # l'inventaire est une liste, True si non vide
+
+        # S'il y a des personnages ou des items
+        if room.characters or room.inventory:
             print("La pièce contient :")
+
+            # Afficher les PNJ
+            for character in room.characters:
+                print(f"    - {character}")
+
+            # Afficher les items
             for item in room.inventory:
                 print(f"    - {item}")
-            print("\n")
+
+            print()
         else:
-            print("Il n'y a rien ici." + "\n")
+            print("Il n'y a rien ici.\n")
 
     def take(game, params, n_params):
         """
@@ -256,3 +258,18 @@ class Actions:
         print("\n" + game.player.get_inventory() + "\n")
         return True
 
+    def talk(game, words, n):
+        if len(words) < 2:
+            print("\nPrécisez le nom du personnage.\n")
+            return False
+
+        target = words[1].lower()
+        room = game.player.current_room
+
+        for character in room.characters:
+            if character.name == target:
+                character.get_msg(game.player)
+                return True
+
+        print(f"\nIl n’y a personne nommé '{target}' ici.\n")
+        return False

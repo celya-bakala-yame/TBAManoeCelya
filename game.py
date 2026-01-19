@@ -7,6 +7,7 @@ from player import Player
 from command import Command
 from actions import Actions
 from item import Item
+from character import Character
 
 
 class Game:
@@ -42,6 +43,14 @@ class Game:
         self.commands["drop"] = drop
         check = Command("check", " : afficher le contenu de votre inventaire", Actions.check, 0)
         self.commands["check"] = check
+        talk = Command(
+            "talk",
+            " <nom_pnj> : parler à un personnage non joueur",
+            Actions.talk,
+            -1
+        )
+        self.commands["talk"] = talk
+        
 
 
 
@@ -134,6 +143,30 @@ class Game:
         archives.inventory.append(livre_faux)
         archives.inventory.append(boite_archives)
 
+        fantome = Character(
+            "fantome",
+            "un esprit pâle qui flotte silencieusement",
+            study4,
+            ["Certains secrets ne s’ouvrent qu’avec la bonne clé."]
+        )
+
+        etudiant = Character(
+            "etudiant_perdu",
+            "un étudiant visiblement stressé",
+            study2,
+            ["J’ai vu une clé quelque part plus loin..."]
+        )
+
+        bibliothecaire = Character(
+            "bibliothecaire",
+            "un homme sévère qui garde le bureau",
+            librarian_office,
+            ["Ce n’est pas parce qu’un tiroir est fermé qu’il est vide."]
+        )
+        study4.characters.append(fantome)
+        study2.characters.append(etudiant)
+        librarian_office.characters.append(bibliothecaire)
+
     # Play the game
     def play(self):
         self.setup()
@@ -163,6 +196,13 @@ class Game:
         else:
             command = self.commands[command_word]
             command.action(self, list_of_words, command.number_of_parameters)
+
+        all_characters = []
+        for room in self.rooms:
+            all_characters.extend(room.characters)
+
+        for character in all_characters:
+            character.move()
 
     # Print the welcome message
     def print_welcome(self):
