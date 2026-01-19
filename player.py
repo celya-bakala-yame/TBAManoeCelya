@@ -30,17 +30,18 @@ class Player():
             print("\nAucune porte dans cette direction !\n")
             return False
 
-        # VERROU : uniquement du bureau passage secret
-        if room.name == "Bureau du bibliothécaire" and next_room.name == "Passage secret":
-            if room.door and room.door.locked:
-                has_key = any(item.name == "cle_passage_secret" for item in self.inventory)
+        
+        #VERROU : vérifier si la DESTINATION a une porte verrouillée
+        if next_room.door and next_room.door.locked:
+            has_key = any(item.name == "cle_passage_secret" for item in self.inventory)
 
-                if not has_key:
-                    print("\nLa porte est verrouillée.\n")
-                    return False
+            if not has_key:
+                print("\nLa porte est verrouillée. Il vous faut la clé du passage secret.\n")
+                return False
 
-                room.door.locked = False
-                print("\nVous avez déverrouillé la porte avec la clé.\n")
+            # Déverrouiller la porte
+            next_room.door.locked = False
+            print("\nVous avez déverrouillé la porte avec la clé du passage secret.\n")
 
         # Historique AVANT déplacement
         self.history.append(room)

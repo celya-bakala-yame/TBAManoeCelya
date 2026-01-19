@@ -77,7 +77,7 @@ class Game:
         self.rooms.append(archives)
         
 
-        secret_corridor.door = Door(locked=True) # Porte du passage secret
+        
         librarian_office.drawer = Drawer(locked=True) # Tiroir du bureau du bibliothécaire
         
 
@@ -163,6 +163,7 @@ class Game:
             librarian_office,
             ["Ce n’est pas parce qu’un tiroir est fermé qu’il est vide."]
         )
+        bibliothecaire.can_move = False
         study4.characters.append(fantome)
         study2.characters.append(etudiant)
         librarian_office.characters.append(bibliothecaire)

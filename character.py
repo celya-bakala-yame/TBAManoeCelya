@@ -5,9 +5,14 @@ class Character:
         self.description = description
         self.current_room = current_room
         self.msgs = msgs
+        self.can_move = True 
 
     def move(self):
-        # 1 chance sur 2 de rester
+        def move(self):
+        # Si le personnage ne peut pas bouger, on arrête  
+        if not self.can_move:                             
+            return False                                  
+
         if random.choice([True, False]) is False:
             return False
 
