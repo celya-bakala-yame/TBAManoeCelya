@@ -1,9 +1,34 @@
+import random
 class Character:
     def __init__(self, name, description, current_room, msgs):
         self.name = name
         self.description = description
         self.current_room = current_room
         self.msgs = msgs
+
+    def move(self):
+        # 1 chance sur 2 de rester
+        if random.choice([True, False]) is False:
+            return False
+
+        possible_rooms = [
+            room for room in self.current_room.exits.values()
+            if room is not None
+        ]
+
+        if not possible_rooms:
+            return False
+
+        new_room = random.choice(possible_rooms)
+
+        # retirer de l'ancienne salle
+        self.current_room.characters.remove(self)
+
+        # ajouter à la nouvelle
+        new_room.characters.append(self)
+        self.current_room = new_room
+
+        return True
 
     def get_msg(self, player):
         # Cas spécial : bibliothécaire
