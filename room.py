@@ -15,7 +15,7 @@ class Room:
         self.description = description
         self.exits = {}
         self.inventory = []        # Inventaire vide (liste d’items)
-        self.character = []
+        self.characters = []
         self.door = None
         self.drawer = None
 
