@@ -1,4 +1,4 @@
-# Description: Game class
+"""Game class"""
 
 # Import modules
 
@@ -8,10 +8,12 @@ from command import Command
 from actions import Actions
 from item import Item
 from character import Character
+from quest import Quest
 
 
 class Game:
-
+     """The Game class manages the overall game state and flow."""
+    
     # Constructor
     def __init__(self):
         self.finished = False
@@ -43,13 +45,16 @@ class Game:
         self.commands["drop"] = drop
         check = Command("check", " : afficher le contenu de votre inventaire", Actions.check, 0)
         self.commands["check"] = check
-        talk = Command(
-            "talk",
-            " <nom_pnj> : parler à un personnage non joueur",
-            Actions.talk,
-            -1
-        )
+        talk = Command("talk", " <nom_pnj> : parler à un personnage non joueur", Actions.talk, -1)
         self.commands["talk"] = talk
+        quests = Command("quests", " : afficher la liste des quêtes", Actions.quests, 0)
+        self.commands["quests"] = quests
+        quest = Command("quest", " <titre> : afficher les détails d'une quête", Actions.quest, 1)
+        self.commands["quest"] = quest
+        activate = Command("activate", " <titre> : activer une quête", Actions.activate, 1)
+        self.commands["activate"] = activate
+        rewards = Command("rewards", " : afficher vos récompenses", Actions.rewards, 0)
+        self.commands["rewards"] = rewards
         
 
 
@@ -163,13 +168,48 @@ class Game:
             librarian_office,
             ["Ce n’est pas parce qu’un tiroir est fermé qu’il est vide."]
         )
+        
         bibliothecaire.can_move = False
         study4.characters.append(fantome)
         study2.characters.append(etudiant)
         librarian_office.characters.append(bibliothecaire)
 
+    def _setup_quests(self):
+        """Initialize all quests."""
+        exploration_quest = Quest(
+            title="Grand Explorateur",
+            description="Explorez tous les lieux de ce monde mystérieux.",
+            objectives=["Visiter Forest"
+                        , "Visiter Tower"
+                        , "Visiter Cave"
+                        , "Visiter Cottage"
+                        , "Visiter Castle"],
+            reward="Titre de Grand Explorateur")
+
+        travel_quest = Quest(
+            title="Grand Voyageur",
+            description="Déplacez-vous 10 fois entre les lieux.",
+            objectives=["Se déplacer 10 fois"],
+            reward="Bottes de voyageur")
+
+        discovery_quest = Quest(
+            title="Découvreur de Secrets",
+            description="Découvrez les trois lieux les plus mystérieux.",
+            objectives=["Visiter Cave"
+                        , "Visiter Tower"
+                        , "Visiter Castle"],
+            reward="Clé dorée")
+
+        # Add quests to player's quest manager
+        self.player.quest_manager.add_quest(exploration_quest)
+        self.player.quest_manager.add_quest(travel_quest)
+        self.player.quest_manager.add_quest(discovery_quest)
+
+
     # Play the game
     def play(self):
+         """Main game loop."""
+        
         self.setup()
         self.print_welcome()
         # Loop until the game is finished
@@ -180,6 +220,7 @@ class Game:
 
     # Process the command entered by the player
     def process_command(self, command_string) -> None:
+        """Process the command entered by the player."""
 
          # --- NOUVEAU : ignorer la commande vide ---
         if command_string.strip() == "":
@@ -209,6 +250,8 @@ class Game:
 
     # Print the welcome message
     def print_welcome(self):
+        """Print the welcome message."""
+        
         print(f"\nBienvenue {self.player.name} dans ce jeu d'aventure !")
         print("Entrez 'help' si vous avez besoin d'aide.")
         #
@@ -216,7 +259,7 @@ class Game:
     
 
 def main():
-    # Create a game object and play the game
+    """Create a game object and play the game"""
     Game().play()
     
 
