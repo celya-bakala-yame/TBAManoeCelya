@@ -13,11 +13,13 @@ class Room:
 
         self.name = name
         self.description = description
+        self.image = image
         self.exits = {}
         self.inventory = []        # Inventaire vide (liste d’items)
         self.characters = []
         self.door = None
         self.drawer = None
+        
 
     # Define the get_exit method.
     def get_exit(self, direction):
