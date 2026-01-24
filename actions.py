@@ -24,8 +24,6 @@ class Actions:
     that can be performed in the game.
     """
 
-    @staticmethod
-
     VALID_DIRECTIONS = {
         "N": "N", "NORD": "N",
         "S": "S", "SUD": "S",
@@ -281,6 +279,9 @@ class Actions:
         item_name = params[1]
         game.player.take(item_name)
 
+        if any(getattr(it, "name", None) == item_name for it in game.player.inventory):
+            game.player.quest_manager.check_action_objectives("prendre", item_name)
+
     
     def drop(game, params, n_params):
         """
@@ -315,6 +316,7 @@ class Actions:
         for character in room.characters:
             if character.name == target:
                 character.get_msg(game.player)
+                game.player.quest_manager.check_action_objectives("parler", target)
                 return True
 
         print(f"\nIl n’y a personne nommé '{target}' ici.\n")
