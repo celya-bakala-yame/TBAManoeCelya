@@ -24,8 +24,6 @@ class Actions:
     that can be performed in the game.
     """
 
-    @staticmethod
-
     VALID_DIRECTIONS = {
         "N": "N", "NORD": "N",
         "S": "S", "SUD": "S",

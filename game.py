@@ -12,7 +12,7 @@ from quest import Quest
 
 
 class Game:
-     """The Game class manages the overall game state and flow."""
+    """The Game class manages the overall game state and flow."""
     
     # Constructor
     def __init__(self):
@@ -208,7 +208,7 @@ class Game:
 
     # Play the game
     def play(self):
-         """Main game loop."""
+        """Main game loop."""
         
         self.setup()
         self.print_welcome()
