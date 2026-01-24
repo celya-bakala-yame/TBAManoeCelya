@@ -4,7 +4,7 @@ class Room:
     """Représente une pièce du jeu."""
 
     # Define the constructor. 
-    def __init__(self, name, description):
+    def __init__(self, name, description, image=None):
         """ Initialise une nouvelle pièce.
 
         Args:
