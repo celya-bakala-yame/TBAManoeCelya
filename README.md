@@ -1,26 +1,83 @@
 # TBA
 
-Ce repo contient la première version (minimale) du jeu d’aventure TBA.
+Ce dépôt contient un jeu d’aventure textuel en Python, se déroulant dans une bibliothèque universitaire mystérieuse.
+Le joueur explore différents lieux, interagit avec des personnages, collecte des objets et résout des énigmes afin de découvrir les secrets cachés de la bibliothèque.
 
-Les lieux sont au nombre de 6. Il n'y a pas encore d’objets ni de personnages autres que le joueur et très peu d’interactions. Cette première version sert de base à ce qui va suivre, et sera améliorée au fur et à mesure.
+Le jeu propose un système de quêtes, des personnages non joueurs (PNJ), des objets à récupérer, ainsi que des zones secrètes accessibles à l’aide de clés.
 
 ## Guide utilisateur : 
   ***1) Comment installer le jeu ?***
 
+git clone https://github.com/celya-bakala-yame/TBAManoeCelya.git
+cd TBAManoeCelya
+python game.py
+
   ***2) Description du jeu***
   
-Un joueur est dans une bibliothèque universitaire et a pour objectif de retrouver un livre rare avant la fermeture de la bibliothèque.
-Pour l'aider, il pourra résoudre des énigmes qui lui donneront des indications sur la direction à prendre ainsi que des clés permettant d'accéder à certaines salles.
+Vous incarnez un étudiant explorant une bibliothèque universitaire ancienne et mystérieuse.
+Votre mission principale est de retrouver un livre rare caché dans les archives, tout en découvrant les secrets enfouis dans les différentes salles.
+
+Pour progresser, vous devrez :
+
+Explorer les différentes pièces
+
+Résoudre des énigmes
+
+Récupérer des objets essentiels
+
+Parler aux personnages non joueurs
+
+Trouver des clés pour débloquer des passages secrets
+
+Compléter des quêtes afin de remporter la partie
+
+L’aventure se déroule dans plusieurs lieux, notamment :
+
+Hall
+
+Salle de lecture
+
+Salles de travail
+
+Bureau du bibliothécaire
+
+Passage secret
+
+Salle des archives
 
 
   ***3) Comment y jouer ?***
 
+Le jeu se joue au clavier en mode texte.
+
 ## Structuration
 
-Il y a pour le moment 5 modules contenant chacun une classe.
+Le projet est structuré autour de plusieurs modules :
 
-- `game.py` / `Game` : description de l'environnement, interface avec le joueur ;
-- `room.py` / `Room` : propriétés génériques d'un lieu  ;
-- `player.py` / `Player` : le joueur ;
-- `command.py` / `Command` : les consignes données par le joueur ;
-- `actions.py` / `Action` : les interactions entre .
+game.py / Game
+➜ Gestion du jeu, boucle principale, interface joueur
+
+room.py / Room
+➜ Gestion des salles, sorties, portes et tiroirs
+
+player.py / Player
+➜ Gestion du joueur, inventaire, historique, quêtes
+
+command.py / Command
+➜ Gestion des commandes saisies
+
+actions.py / Actions
+➜ Implémentation des actions du joueur
+
+item.py / Item
+➜ Objets manipulables
+
+character.py / Character
+➜ Personnages non joueurs (PNJ)
+
+quest.py / Quest & QuestManager
+➜ Système de quêtes et progression
+
+## Objectif du jeu
+
+Le joueur gagne la partie lorsqu’il a complété toutes les quêtes principales, et perd s’il entre dans certaines zones dangereuses sans l’équipement requis.

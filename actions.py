@@ -264,20 +264,19 @@ class Actions:
             print("Il n'y a rien ici.\n")
 
     def take(game, params, n_params):
-        """
-        Commande take : permet au joueur de prendre un item.
-        
-        Args:
-            game (Game): objet Game
-            params (list): liste des mots de la commande
-            n_params (int): nombre de paramètres attendus
-        """
         if len(params) < 2:
             print("Précisez l'item à prendre. Exemple : take lampe")
-            return
+            return False
 
-        item_name = params[1]
+        item_name = params[1].strip().lower()
         game.player.take(item_name)
+
+        # Valider seulement si l'objet est bien dans l'inventaire (comparaison en minuscule)
+        if any(getattr(it, "name", "").lower() == item_name for it in game.player.inventory):
+            game.player.quest_manager.check_action_objectives("prendre", item_name)
+            return True
+
+        return False
 
     
     def drop(game, params, n_params):
@@ -307,12 +306,13 @@ class Actions:
             print("\nPrécisez le nom du personnage.\n")
             return False
 
-        target = words[1].lower()
+        target = words[1].strip().lower()
         room = game.player.current_room
 
         for character in room.characters:
-            if character.name == target:
+            if character.name.lower() == target:
                 character.get_msg(game.player)
+                game.player.quest_manager.check_action_objectives("parler", target)
                 return True
 
         print(f"\nIl n’y a personne nommé '{target}' ici.\n")

@@ -30,6 +30,8 @@ class Game:
     # Setup the game
     def setup(self, player_name=None):
 
+
+
         # Setup commands
 
         help = Command("help", " : afficher cette aide", Actions.help, 0)
@@ -54,9 +56,9 @@ class Game:
         self.commands["talk"] = talk
         quests = Command("quests", " : afficher la liste des quêtes", Actions.quests, 0)
         self.commands["quests"] = quests
-        quest = Command("quest", " <titre> : afficher les détails d'une quête", Actions.quest, 1)
+        quest = Command("quest", " <titre> : afficher les détails d'une quête", Actions.quest, -1)
         self.commands["quest"] = quest
-        activate = Command("activate", " <titre> : activer une quête", Actions.activate, 1)
+        activate = Command("activate", " <titre> : activer une quête", Actions.activate, -1)
         self.commands["activate"] = activate
         rewards = Command("rewards", " : afficher vos récompenses", Actions.rewards, 0)
         self.commands["rewards"] = rewards
@@ -109,6 +111,7 @@ class Game:
             player_name = input("\nEntrez votre nom: ")
         self.player = Player(player_name)
         self.player.current_room = hall
+        self._setup_quests()
 
         # Setup items
 
@@ -184,34 +187,79 @@ class Game:
     def _setup_quests(self):
         """Initialize all quests."""
         exploration_quest = Quest(
-            title="Grand Explorateur",
-            description="Explorez tous les lieux de ce monde mystérieux.",
-            objectives=["Visiter Forest"
-                        , "Visiter Tower"
-                        , "Visiter Cave"
-                        , "Visiter Cottage"
-                        , "Visiter Castle"],
-            reward="Titre de Grand Explorateur")
+            title="Le Tour de la Bibliothèque",
+            description="Explorez toutes les salles principales de la bibliothèque.",
+            objectives=[
+                "Visiter Hall",
+                "Visiter Salle de lecture",
+                "Visiter Salle de travail 1",
+                "Visiter Salle de travail 2",
+                "Visiter Salle de travail 3",
+                "Visiter Salle de travail 4",
+            ],
+            reward="Plan annoté"
+        )
 
-        travel_quest = Quest(
-            title="Grand Voyageur",
-            description="Déplacez-vous 10 fois entre les lieux.",
-            objectives=["Se déplacer 10 fois"],
-            reward="Bottes de voyageur")
+        interaction_quest = Quest(
+            title="Le Bibliothécaire Suspicionneux",
+            description="Trouvez le secret que garde le bibliothécaire.",
+            objectives=[
+                "prendre cle_tiroir",
+                "parler avec bibliothecaire",
+            ],
+            reward="Indication secrète"
+        )
 
-        discovery_quest = Quest(
-            title="Découvreur de Secrets",
-            description="Découvrez les trois lieux les plus mystérieux.",
-            objectives=["Visiter Cave"
-                        , "Visiter Tower"
-                        , "Visiter Castle"],
-            reward="Clé dorée")
+        item_quest = Quest(
+            title="Le Livre Interdit",
+            description="Trouvez le vrai livre rare caché dans les archives.",
+            objectives=[
+                "Visiter Bureau du bibliothécaire",
+                "prendre cle_passage_secret",
+                "Visiter Passage secret",
+                "Visiter Salle des archives",
+                "prendre livre_rare",
+            ],
+            reward="Livre ancien"
+        )
+
 
         # Add quests to player's quest manager
         self.player.quest_manager.add_quest(exploration_quest)
-        self.player.quest_manager.add_quest(travel_quest)
-        self.player.quest_manager.add_quest(discovery_quest)
+        self.player.quest_manager.add_quest(interaction_quest)
+        self.player.quest_manager.add_quest(item_quest)
 
+    def win(self) -> bool:
+        """
+        Vérifie si le joueur a gagné la partie.
+
+        Returns:
+            bool: True si toutes les quêtes sont terminées, False sinon.
+        """
+        quests = self.player.quest_manager.get_all_quests()
+
+        # S'il n'y a aucune quête, on ne peut pas gagner
+        if not quests:
+            return False
+
+        return all(quest.is_completed for quest in quests)
+
+
+    def loose(self) -> bool:
+        """
+        Check if the player has lost the game.
+
+        Example rule:
+        - If the player enters 'Salle des archives' without the 'lampe', they lose.
+        """
+        # Défaite seulement si on est dans une pièce précise
+        if self.player.current_room.name != "Salle des archives":
+            return False
+
+        # Vérifier la possession d'un objet précis
+        has_lampe = any(getattr(it, "name", "") == "lampe" for it in self.player.inventory)
+        return not has_lampe
+        
 
     # Play the game
     def play(self):
@@ -221,9 +269,19 @@ class Game:
         self.print_welcome()
         # Loop until the game is finished
         while not self.finished:
-            # Get the command from the player
             self.process_command(input("> "))
-        return None
+
+            if self.loose():
+                print("\n💀 Vous avancez dans les archives dans le noir... quelque chose vous tombe dessus.")
+                print("😵 Vous avez perdu la partie.\n")
+                self.finished = True
+                break
+
+            if self.win():
+                print("\n🏆 Félicitations ! Vous avez terminé toutes les quêtes !")
+                print("🎉 Vous avez gagné la partie !\n")
+                self.finished = True
+                break
 
     # Process the command entered by the player
     def process_command(self, command_string) -> None:
